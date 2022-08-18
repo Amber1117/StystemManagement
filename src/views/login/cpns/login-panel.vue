@@ -1,8 +1,8 @@
 <template>
   <div class="login-panel">
   <h1>后台管理系统</h1>
-  <el-tabs type="border-card" class="login-tabs" stretch>
-    <el-tab-pane>
+  <el-tabs type="border-card" class="login-tabs" stretch v-model="curTab">
+    <el-tab-pane name="account">
       <template #label>
         <span class="custom-tabs-label">
           <el-icon><Avatar /></el-icon>
@@ -11,20 +11,20 @@
       </template>
       <login-account ref="accountRef" />
     </el-tab-pane>
-    <el-tab-pane label="Config">
+    <el-tab-pane name="phone">
       <template #label>
         <span class="custom-tabs-label">
           <el-icon><Iphone /></el-icon>
           <span>手机登录</span>
         </span>
       </template>
-      <login-phone />
+      <login-phone ref="phoneRef"/>
     </el-tab-pane>
   </el-tabs>
 
-    <div class="account-control">
-      <el-checkbox>记住密码</el-checkbox>
-      <el-link>忘记密码</el-link>
+    <div class="account-control" v-show="curTab !== 'phone'">
+      <el-checkbox v-model="isKeepPassword">记住密码</el-checkbox>
+      <el-link type="primary">忘记密码</el-link>
     </div>
 
     <el-button type="primary" class="login-btn" @click="handleLoginClick">立即登录</el-button>
@@ -44,19 +44,29 @@ export default defineComponent({
     LoginPhone
   },
   setup() {
+    //当下选中的选项卡
+    const curTab = ref('account')
     //记录记住密码状态
      let isKeepPassword = ref(true)
      //获取组件 注意类型
      const accountRef = ref<InstanceType<typeof LoginAccount>>()
+     const phoneRef = ref<InstanceType<typeof LoginPhone>>()
      //登录事件
      const handleLoginClick = () => {
        //当点击按钮后，按照情况调用组件内的事件
-       accountRef.value?.loginAction()
+       if(curTab.value === "account") {
+         //如果是账号登录就调用账户组件的方法
+          accountRef.value?.loginAction(isKeepPassword.value)
+       } else {
+          phoneRef.value?.loginAction()
+       }
 
      }
     return {
+     curTab,
      isKeepPassword,
      accountRef,
+     phoneRef,
      handleLoginClick
     }
   }

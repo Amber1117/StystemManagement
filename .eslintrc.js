@@ -20,6 +20,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     "prettier/prettier": "off",
-    "vue/multi-word-component-names": "off"
+    "vue/multi-word-component-names": "off",
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
   }
 }

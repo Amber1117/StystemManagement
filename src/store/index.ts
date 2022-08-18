@@ -1,12 +1,24 @@
 import { createStore } from 'vuex'
+//导入类型
+import { IRootState } from './types'
 
-const store = createStore({
+//导入模块
+import  login  from '../store/login/login'
+const store = createStore<IRootState>({
   state: () => {
     return {
-      name: 'wp'
+      name: 'wp',
+      age: 18
     }
   },
-  mutations: {}
+  mutations: {},
+  modules: {
+    login
+  }
 })
+//同步vuex中的用户信息与缓存
+export function setupStore() {
+  store.dispatch('login/loadLocalLogin')
+}
 
 export default store

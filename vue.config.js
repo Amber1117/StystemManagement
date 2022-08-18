@@ -10,6 +10,17 @@ module.exports = defineConfig({
   //打包文件
   outputDir: './build',
   // publicPath: './',//修改资源路径
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://152.136.185.210:5000',
+        pathRewrite: {
+          '^/api': ''
+        },
+        changeOrigin: true
+      }
+    }
+  },
   configureWebpack: {
     resolve: {
       //文件别名

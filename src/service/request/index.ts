@@ -30,8 +30,6 @@ class WPRequest {
     //对所有创建的实例进行拦截
     this.instance.interceptors.request.use(
       (config) => {
-        console.log('所有实例的请求拦截：请求成功')
-
         //判断是否需要loading
         if (this.showLoading) {
           this.loading = ElLoading.service({
@@ -49,7 +47,6 @@ class WPRequest {
     )
     this.instance.interceptors.response.use(
       (res) => {
-        console.log('所有的实例都有的拦截器: 响应成功拦截')
         //将loading移除
         this.loading ?.close()
         const data = res.data
@@ -74,7 +71,7 @@ class WPRequest {
   requset(config: HYRequestConfig) {
     return new Promise((resolve, reject) => {
       //对每一次请求进行拦截
-      if (config.interceptors ?.requestInterceptor) {
+      if (config.interceptors?.requestInterceptor) {
         config = config.interceptors.requestInterceptor(config)
       }
       // 2.判断是否需要显示loading
@@ -83,7 +80,7 @@ class WPRequest {
       }
       this.instance.request(config).then((res) => {
         // 1.单个请求对数据的处理
-        if (config.interceptors ?.responseInterceptor) {
+        if (config.interceptors?.responseInterceptor) {
           res = config.interceptors.responseInterceptor(res)
         }
         // 2.将showLoading设置true, 这样不会影响下一个请求
