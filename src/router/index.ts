@@ -8,11 +8,19 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/login/Login.vue')
   },
   {
     path: '/main',
+    name: 'main',
     component: () => import('@/views/main/Main.vue')
+    // children: [] -> 根据userMenus来决定(动态添加) -> children
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/not-found/not-found.vue')
   }
 ]
 const router = createRouter({

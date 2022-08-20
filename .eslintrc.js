@@ -22,5 +22,6 @@ module.exports = {
     "prettier/prettier": "off",
     "vue/multi-word-component-names": "off",
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'vue/no-v-for-template-key': 'off'
   }
 }
