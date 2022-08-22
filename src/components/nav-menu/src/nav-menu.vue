@@ -6,7 +6,7 @@
     </div>
     <!-- 菜单列表部分 -->
     <el-menu
-      default-active='2'
+      :default-active='defaultValue'
       class="el-menu-vertical"
       :collapse="collapse"
       background-color="#0c2135"
@@ -58,9 +58,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { pathMapToMenu } from '@/utils/map-menus'
 export default defineComponent({
   props: {
     collapse: {
@@ -71,7 +72,11 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     const userMenus = computed(() => store.state.login.userMenus)
+    const currentPath = route.path
+    const menu =  pathMapToMenu(userMenus.value, currentPath) //计算属性返回的实际上是ref
+    const defaultValue = ref(menu.id + '')   //由当前url决定刷新时的defaultValue
     //点击菜单切换路由
     const handleMenuItemClick = (item: any) => {
       router.push({
@@ -80,7 +85,8 @@ export default defineComponent({
     }
     return {
       userMenus,
-      handleMenuItemClick
+      handleMenuItemClick,
+      defaultValue
     }
   }
 })

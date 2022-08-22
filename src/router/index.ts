@@ -1,10 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { RouteRecordRaw } from 'vue-router'
 import localCache from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/main'
   },
   {
     path: '/login',
@@ -30,11 +31,16 @@ const router = createRouter({
 
 //添加路由导航首位
 router.beforeEach((to) => {
-  if(to.path !== '/login') {
+  if (to.path !== '/login') {
     const token = localCache.getCache('token')
-    if(!token) {
-       return '/login'
+    if (!token) {
+      return '/login'
     }
   }
+  //当访问/时，自动跳到用户菜单的 第一个路由
+  if (to.path === '/main') {
+    return firstMenu.url
+  }
+
 })
 export default router

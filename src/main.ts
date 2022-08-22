@@ -15,9 +15,10 @@ import './assets/css/index.less'
 
 const app = createApp(App)
 registerApp(app)
-app.use(router)
 app.use(store)
+//必须先同步菜单，才能进行路由注册，否则刷新时会匹配不到
 setupStore()
+app.use(router)
 app.mount('#app')
 
 // interface DataType {
