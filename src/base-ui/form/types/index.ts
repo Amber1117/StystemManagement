@@ -2,6 +2,7 @@
 type IFormType = 'input' | 'password' | 'select' | 'datepicker'
 //传入配置的数据类型
 export interface IFormItem {
+  field: string,
   type: IFormType,    //标签类型
   label: string,  //表单label
   rules?: any[],

@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 import { setupStore } from './store'
 
-import { registerApp } from './global'
+import { globalRegister } from './global'
 import wpRequest from './service'
 
 //引入初始化css文件
@@ -14,7 +14,7 @@ import 'normalize.css'
 import './assets/css/index.less'
 
 const app = createApp(App)
-registerApp(app)
+app.use(globalRegister)
 app.use(store)
 //必须先同步菜单，才能进行路由注册，否则刷新时会匹配不到
 setupStore()

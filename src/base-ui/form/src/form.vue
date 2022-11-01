@@ -1,5 +1,8 @@
 <template>
   <div class="wp-form">
+    <div class="header">
+      <slot name="header"></slot>
+    </div>
       <el-form :label-width="labelWidth">
         <el-row>
           <template v-for="item in formItems" :key="item.label">
@@ -11,7 +14,7 @@
                   <template v-if="item.type === 'input' || item.type === 'password'">
                      <el-input
                       :placeholder="item.placeholder"
-
+                       v-model="formData[`${item.field}`]"
                       :show-password="item.type === 'password'"
                      />
                   </template>
@@ -19,6 +22,7 @@
                   <template v-else-if="item.type === 'select'">
                     <el-select
                      :placeholder="item.placeholder"
+                     v-model="formData[`${item.filed}`]"
                       v-bind="item.otherOptions"
                       style="width: 100%">
                       <el-option
@@ -31,8 +35,9 @@
                   </template>
 
                   <template v-else-if="item.type === 'datepicker'">
-                    <el-date-picker v-bind="item.otherOptions"/>
-
+                    <el-date-picker
+                    v-model="formData[`${item.filed}`]"
+                     v-bind="item.otherOptions"/>
                   </template>
 
                 </el-form-item>
@@ -42,15 +47,22 @@
         </el-row>
 
       </el-form>
+      <div class="footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 import { IFormItem } from '../types'
 
 export default defineComponent({
   props: {
+    modelValue: {
+      type: Object,
+      required: true
+    },
     formItems: {
       type: Array as PropType<IFormItem[]>,
       default: () => [] //ts语法要求，必须是箭头函数
@@ -76,8 +88,15 @@ export default defineComponent({
       default: '100px'
     }
   },
-  setup() {
-    return {}
+  emits:['update:modelValue'],
+  setup(props, { emit }) {
+    const formData = ref({ ...props.modelValue })  //浅拷贝
+    watch(formData,
+    (newValue) => emit('update:modelValue',newValue),
+    {deep: true})
+    return {
+      formData
+    }
   }
 })
 </script>

@@ -1,6 +1,6 @@
 import  wpRequest  from "../index"
 //导入所需类型
-import { IAccount, IDataType, ILoginResult  } from './type'
+import { IAccount, ILoginResult  } from './type'
 //可枚举属性，用来保存请求地址
 enum LoginAPI {
   AccountLogin = '/login',

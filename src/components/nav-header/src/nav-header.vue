@@ -5,19 +5,24 @@
     </el-icon>
 
     <div class="content">
-      <div>面包屑</div>
+       <breadcrumb :breadcrumbs="breadcrumbs"/>
        <user-info></user-info>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
+import { useStore } from '@/store'
+import { useRoute } from 'vue-router'
 import UserInfo from './user-info.vue'
+import breadcrumb from '@/base-ui/breadcrumb/src/breadcrumb.vue'
+import { pathMapBreadcrumbs } from '@/utils/map-menus'
 export default defineComponent({
   emits: ['foldChange'],
   components: {
-    UserInfo
+    UserInfo,
+    breadcrumb
   },
   setup (props, { emit }) {
     const isFold = ref(false)  //是否折叠
@@ -25,9 +30,19 @@ export default defineComponent({
       isFold.value = !isFold.value
       emit("foldChange", isFold.value)
     }
+
+    //面包屑相关逻辑
+    const store = useStore()
+
+    const breadcrumbs = computed(() => {
+      const userMenus = store.state.login.userMenus
+      const route = useRoute()
+      return pathMapBreadcrumbs(userMenus, route.path)
+    })
     return {
       isFold,
-      handleFoldClick
+      handleFoldClick,
+      breadcrumbs
     }
   }
 })
